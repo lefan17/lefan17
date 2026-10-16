@@ -29,8 +29,8 @@ Python · FastAPI + SQLite + 自研压测引擎 + GitHub Actions
 Python · LangGraph + LangChain · OpenAPI 契约驱动
 
 把「从契约生成用例 → 执行 → 自动重试 → 缺陷归因 → 出可视化报告」交给一条四节点
-流水线，LLM 调用失败时降级到确定性的 MockBrain，而不是崩掉整条链路。采集 140 条用例
-（121 passed + 15 xfailed）；除接口与真实浏览器断言外，还把 RAG 检索质量当作被测对象，
+流水线，LLM 调用失败时降级到确定性的 MockBrain，而不是崩掉整条链路。采集 148 条用例
+（129 passed + 15 xfailed）；除接口与真实浏览器断言外，还把 RAG 检索质量当作被测对象，
 用 recall@5 / MRR 量化——同一套 7 条查询，缺陷实现 0.5714，正确实现 1.0000。
 
 ## 业务项目与出处
