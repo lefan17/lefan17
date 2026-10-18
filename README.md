@@ -7,17 +7,23 @@ Agent 编排，都做成能跑在 CI 里、能被别人按 README 复现的东�
 自动化做扎实，再把「跑得对不对」推进到「跑得够不够快、门禁拦不拦得住」，最后把执行与
 归因交给 Agent。后两个是业务项目与这条线的前身。
 
+三个 Python 仓都把结果发布成可以直接打开的页面（GitHub Pages），不用 clone、不用装环境：
+[测试报告](https://lefan17.github.io/fullstack-test-framework/) ·
+[性能看板](https://lefan17.github.io/perf-baseline-quality-gate/) ·
+[Agent 报告](https://lefan17.github.io/agent-test-hub/)。报表由 CI 每轮刷新，不是摆上去的截图。
+
 ## 一条测试 / 质量线（按发展顺序）
 
 ### 1. [fullstack-test-framework](https://github.com/lefan17/fullstack-test-framework) — 接口 + UI + 业务全链路自动化测试框架
 Python · pytest + FastAPI + Playwright + Allure + GitHub Actions
 
-这条线的起点，也是后两个仓的地基。`pytest --collect-only -q` 收 **577** 条用例：
+这条线的起点，也是后两个仓的地基。`pytest --collect-only -q` 收 **581** 条用例：
 接口自动化、UI 自动化、带本地 Mock 后端的业务全链路（状态机、乐观锁、幂等、并发竞态、
 Decimal 金额精度），以及独立成组的契约属性测试（**224** 条，其中 213 passed + 11 xfailed）。
 契约那一组扫出 **6 类真实契约缺陷**：DEF-05/06 已修并由正常用例固化，DEF-01~04 拆成
 11 条 `xfail(strict=True)` 钉住——修不修是取舍，但**修好的和被钉住的都得说清是哪一类**。
-**9** 个 CI job，`-m "not ui"` 覆盖率 **86%**（分母 8450 行）。
+**9** 个 CI job，`-m "not ui"` 覆盖率 **86%**（分母 8491 行）。
+测试报告在线可看：<https://lefan17.github.io/fullstack-test-framework/>
 
 两件事值得单独说：**门禁是自洽的**——`scripts/check_gate_policy.py` 拿门禁文档与
 `test.yml`、`pytest.ini` 逐条机器校验，改了 workflow 不改文档就红；**耗时不被当成结论**——
@@ -33,10 +39,12 @@ Python · FastAPI + SQLite + 自研压测引擎 + GitHub Actions
 同一个缺陷换台机器绝对数字全变，但「它是灾难」这个结论不变。
 
 基线显式建立、劣化按实测出来的容忍带判定（先按经验写 3%，被一轮无改动的重跑打出
-+4.1% 假阳性，才改成 10%），**12 条门禁规则**接入 CI，平台自身 **180** 条用例本机实测
++4.1% 假阳性，才改成 10%），**12 条门禁规则**接入 CI，平台自身 **188** 条用例本机实测
 全绿（runner 上传的 CI 日志里是 `[suite] 通过 117 / 失败 0`，那是早一轮时点的快照，原样保留）。
 难的不是把门禁写绿，是不让它静默放行：CI 上 R3 一度永远是「跳过」，被当成「比过了
 没劣化」，这条已经改成显式的 `[SKIP]` 并补了让门禁真的判过一次、真的红一次的端到端用例。
+在线看板：<https://lefan17.github.io/perf-baseline-quality-gate/>（P95 趋势、flaky 名单，
+CI 每轮刷新，断网可看）。
 
 ### 3. [agent-test-hub](https://github.com/lefan17/agent-test-hub) — Agent 自动测试系统
 Python · LangGraph + LangChain · OpenAPI 契约驱动
@@ -49,6 +57,7 @@ Python · LangGraph + LangChain · OpenAPI 契约驱动
 除接口与真实浏览器断言外，还把 RAG 检索质量当作被测对象，用 recall@5 / MRR 量化——
 同一套 7 条查询，缺陷实现 **0.5714**，正确实现 **1.0000**。这个数字不是拿来好看的：
 它的作用是把「RAG 好不好」从主观判断变成一个能被门禁拦住的指标。
+报告在线可看：<https://lefan17.github.io/agent-test-hub/>
 
 ## 业务项目与出处
 
