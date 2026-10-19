@@ -51,10 +51,11 @@ CI 每轮刷新，断网可看）。
 Python · LangGraph + LangChain · OpenAPI 契约驱动
 
 把「从契约生成用例 → 执行 → 自动重试 → 缺陷归因 → 出可视化报告」交给一条四节点
-流水线，LLM 调用失败时降级到确定性的 MockBrain，而不是崩掉整条链路。采集 **323** 条用例
-（含 UI 是 304 passed + 4 skipped + 15 xfailed，不含 UI 是 300 passed + 4 skipped + 15 xfailed；
+流水线，LLM 调用失败时降级到确定性的 MockBrain，而不是崩掉整条链路。采集 **327** 条用例
+（有 Key 时 308 passed + 15 xfailed，CI 上无 Key 时 304 passed + 4 skipped + 15 xfailed；
 skipped 那 4 条是需要真实 LLM Key 的冒烟，故意不在 PR 门禁里跑），
-**分支覆盖率 91.21% ~ 91.32%**（仓库级门禁 70% + per-file 60%）。
+**分支覆盖率 91.20% ~ 91.25%**（仓库级门禁 70% + per-file 60%；配了 Key 真跑冒烟是
+91.91%，因为那 4 条会多覆盖 `llm_brain.py` 十几行）。
 
 除接口与真实浏览器断言外，还把 RAG 检索质量当作被测对象，用 recall@5 / MRR 量化——
 同一套 7 条查询，缺陷实现 **0.5714**，正确实现 **1.0000**。这个数字不是拿来好看的：
