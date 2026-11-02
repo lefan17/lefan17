@@ -22,7 +22,7 @@ Python · pytest + FastAPI + Playwright + Allure + GitHub Actions
 Decimal 金额精度），以及独立成组的契约属性测试（**224** 条，其中 213 passed + 11 xfailed）。
 契约那一组扫出 **6 类真实契约缺陷**：DEF-05/06 已修并由正常用例固化，DEF-01~04 拆成
 11 条 `xfail(strict=True)` 钉住——修不修是取舍，但**修好的和被钉住的都得说清是哪一类**。
-**9** 个 CI job，覆盖率有**两道门**：仓库级 `-m "not ui"` **87%**（分母 8916 行）
+**9** 个 CI job，覆盖率有**两道门**：仓库级 `-m "not ui"` **87%**（分母 8966 行，实测 86.98%）
 和 per-file **55%**（22 个文件逐个判，拦仓库级看不见的单点失守）。
 测试报告在线可看：<https://lefan17.github.io/fullstack-test-framework/>
 
